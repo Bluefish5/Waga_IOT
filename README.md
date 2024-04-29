@@ -1,1 +1,1 @@
-"# IOT" 
+# Division of equipment into folders
