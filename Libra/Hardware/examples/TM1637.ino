@@ -29,3 +29,5 @@ void loop() {
   display.showNumberDec(randNumber, false); // Display the number 
   delay(1500);
 };
+
+// https://forbot.pl/blog/kurs-arduino-ii-wyswietlacze-7-segmentowe-id18413
