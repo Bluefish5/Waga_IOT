@@ -1,3 +1,5 @@
+#include "animation.h"
+
 #include "TM1637Display.h"
 #include "HX711.h"
 

@@ -30,4 +30,4 @@ void loop() {
   delay(1500);
 };
 
-// https://forbot.pl/blog/kurs-arduino-ii-wyswietlacze-7-segmentowe-id18413
+// https://forbot.pl/blog/kurs-arduino-ii-wyswietlacze-7-segmentowe-id18413wa
