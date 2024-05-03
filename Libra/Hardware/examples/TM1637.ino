@@ -14,7 +14,7 @@ void setup() {
 
 void loop() {
   display.clear();  // Clear the display
-  uint8_t data[] = {
+  wdata[] = {
       SEG_A | SEG_B | SEG_C,                  // T
       SEG_A | SEG_F | SEG_G | SEG_E | SEG_D,  // E
       SEG_A | SEG_F | SEG_G | SEG_C | SEG_D,  // S

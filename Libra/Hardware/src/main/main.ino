@@ -19,10 +19,34 @@
 
 TM1637Display display(CLK, DIO);
 HX711 scale;
+
+
+uint8_t frameCursor = 0;
+uint8_t frameSets[][]=
+    {SEG_A,SEG_A,SEG_A,SEG_A},
+    {SEG_B,SEG_B,SEG_B,SEG_B},
+    {SEG_C,SEG_C,SEG_C,SEG_C},
+    {SEG_D,SEG_D,SEG_D,SEG_D},
+    {SEG_E,SEG_E,SEG_E,SEG_E},
+    {SEG_E,SEG_E,SEG_E,SEG_E};
+
+uint8_t* getFrame() return frameSets[frameCursor++];
+
+unsigned long actualTime = 0;
+unsigned long savedTime = 0;
+unsigned long savedTimeAnimation = 0;
+unsigned long timeDiffrence = 0;
+unsigned long timeDiffrenceAnimation = 0;
+
 int buttonState = 0;
 
-
 void setup() {
+
+  // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
+  // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
+  // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
+
+
   Serial.begin(115200);  
 
   pinMode(SWITCH_CHCIKEN_PIN, INPUT);
@@ -34,33 +58,31 @@ void setup() {
   display.setBrightness(5);
   display.clear();
 
-  //attachInterrupt(digitalPinToInterrupt(motionSensor), detectsMovement, RISING);
-}
+  
+  //while(!scale.is_ready());
+
+  scale.set_scale();
+
+  savedTime = millis();
+  while(!(timeDiffrence >= 10000UL) )
+  {
+    actualTime = millis();
+    timeDiffrence = actualTime - savedTime;
+    timeDiffrenceAnimation = actualTime - savedTimeAnimation;
+    if(timeDiffrenceAnimation >= 500UL)
+    {
+      savedTimeAnimation = actualTime;
+      display.setSegments(getFrame());
+    }
+  }
+  scale.tare();
+  }
+
 
 void loop() {
-    // loading scale => animation on display
-    if (scale.is_ready()) {
-        scale.set_scale();  
-
-        // Display animation, wainting sequence
-        Serial.println("Tare... remove any weights from the scale.");
-        delay(5000);
-
-        scale.tare();
-        delay(5000);
-
-        // scale loaded => take meseurments, display it, wait for interupt, BT
-        while (true)
-        {
-            long reading = scale.get_units(10);
-            display.showNumberDec(reading, false);
-        }
+  // scale loaded => take meseurments, display it, wait for interupt, BT
+  long reading = scale.get_units(10);
+  display.showNumberDec(reading, false);
         
-        
-  } 
-
-  delay(1);
 }
 
-//   buttonState = digitalRead(buttonPin);
-//   if (buttonState == HIGH);
