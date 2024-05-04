@@ -1,5 +1,4 @@
-#include "animation.h"
-
+#include "BluetoothSerial.h"
 #include "TM1637Display.h"
 #include "HX711.h"
 
@@ -48,11 +47,10 @@ unsigned long timeDiffrenceAnimation = 0;
 
 int buttonState = 0;
 
-
+long reading = 0;
 
 void setup() {
 
-  // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
 
@@ -61,7 +59,6 @@ void setup() {
   SerialBT.begin("WAGA_BT"); 
 
   pinMode(SWITCH_CHCIKEN_PIN, INPUT);
-  pinMode(SWITCH_NORMAL_PIN, INPUT);
   pinMode(BUTTON_TARA_PIN, INPUT);
 
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
@@ -70,7 +67,7 @@ void setup() {
   display.clear();
 
   
-  //while(!scale.is_ready());
+  while(!scale.is_ready())delay(1);
 
   scale.set_scale();
 
@@ -91,11 +88,19 @@ void setup() {
 
 
 void loop() {
-  // scale loaded => take meseurments, display it, wait for interupt, BT
-  long reading = scale.get_units(10);
+  reading = scale.get_units(10);
   display.showNumberDec(reading, false);
   if (SerialBT.available()){
-    
+    char incomingChar = SerialBT.read();
+    if (incomingChar != '\n'){
+      message += String(incomingChar);
+    }
+    else{
+      message = "";
+    }
+  }
+  if (message =="1"){
+    SerialBT.println(reading);
   }
         
 }
