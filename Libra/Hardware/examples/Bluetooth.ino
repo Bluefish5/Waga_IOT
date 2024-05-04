@@ -13,20 +13,15 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
-// Bluetooth Serial object
 BluetoothSerial SerialBT;
 
-// GPIO where LED is connected to
-const int ledPin =  25;
 
-// GPIO where the DS18B20 is connected to
+const int ledPin =  25;
 const int oneWireBus = 32;          
-// Setup a oneWire instance to communicate with any OneWire devices
 OneWire oneWire(oneWireBus);
-// Pass our oneWire reference to Dallas Temperature sensor 
 DallasTemperature sensors(&oneWire);
 
-// Handle received and sent messages
+
 String message = "";
 char incomingChar;
 String temperatureString = "";

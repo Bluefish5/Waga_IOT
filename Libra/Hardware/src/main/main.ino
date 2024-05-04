@@ -16,10 +16,18 @@
 #define LOADCELL_DOUT_PIN 2;
 #define LOADCELL_SCK_PIN 3;
 
+// Check if Bluetooth configs are enabled
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
+#endif
+
 
 TM1637Display display(CLK, DIO);
 HX711 scale;
+BluetoothSerial SerialBT;
 
+String message = "";
+char incomingChar;
 
 uint8_t frameCursor = 0;
 uint8_t frameSets[][]=
@@ -40,6 +48,8 @@ unsigned long timeDiffrenceAnimation = 0;
 
 int buttonState = 0;
 
+
+
 void setup() {
 
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
@@ -47,7 +57,8 @@ void setup() {
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
 
 
-  Serial.begin(115200);  
+  Serial.begin(115200); 
+  SerialBT.begin("WAGA_BT"); 
 
   pinMode(SWITCH_CHCIKEN_PIN, INPUT);
   pinMode(SWITCH_NORMAL_PIN, INPUT);
@@ -83,6 +94,9 @@ void loop() {
   // scale loaded => take meseurments, display it, wait for interupt, BT
   long reading = scale.get_units(10);
   display.showNumberDec(reading, false);
+  if (SerialBT.available()){
+    
+  }
         
 }
 
