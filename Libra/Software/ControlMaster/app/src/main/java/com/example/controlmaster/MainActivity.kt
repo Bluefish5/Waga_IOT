@@ -11,8 +11,7 @@ class MainActivity : AppCompatActivity() {
     val recyclerView: RecyclerView = findViewById(R.id.myRecyclerView)
     val adapter = RecyclerViewAdapter(ArrayList())
 
-    recyclerView.adapter = adapter
-    adapter.addItem(appData.getDevices())
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
