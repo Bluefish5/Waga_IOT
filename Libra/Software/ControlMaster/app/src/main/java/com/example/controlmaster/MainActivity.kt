@@ -24,8 +24,5 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = AA_RecyclerViewAdapter(devices)
-
-
-
     }
 }
