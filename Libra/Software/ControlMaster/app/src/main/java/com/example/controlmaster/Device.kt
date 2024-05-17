@@ -1,14 +1,4 @@
-import org.simpleframework.xml.Element
-import org.simpleframework.xml.Root
+package com.example.controlmaster
 
-@Root(name = "Device", strict = false)
-data class Device(
-    @field:Element(name = "ID")
-    var id: Int = 0,
-
-    @field:Element(name = "Name")
-    var name: String = "",
-
-    @field:Element(name = "Image")
-    var image: String = ""
-)
+class Device(var id: Int, var name: String, var image: String) {
+}

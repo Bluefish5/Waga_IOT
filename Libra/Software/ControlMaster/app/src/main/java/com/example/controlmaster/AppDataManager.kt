@@ -1,14 +1,17 @@
 package com.example.controlmaster
 
-import Device
 import android.content.Context
-import androidx.datastore.core.Serializer
 import org.simpleframework.xml.core.Persister
 import java.io.File
 import java.io.FileOutputStream
 
 class AppDataManager {
     val listOfDevices = listOf("waga","starter")
+
+
+    fun getDevicesList(): List<String> {
+        return listOfDevices
+    }
     fun getDevices(): Device {
         val serializer = Persister()
         val source = File("app/res/values/devices.xml")

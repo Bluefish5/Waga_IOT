@@ -23,7 +23,7 @@
 //    fun enableBluetooth(activity: Activity) {
 //        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 //        if (bluetoothAdapter == null) {
-//            Toast.makeText(activity, "Device doesn't support Bluetooth", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(activity, "com.example.controlmaster.Device doesn't support Bluetooth", Toast.LENGTH_SHORT).show()
 //        } else {
 //            if (!bluetoothAdapter.isEnabled) {
 //                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
@@ -91,7 +91,7 @@
 //                        // for ActivityCompat#requestPermissions for more details.
 //                        return
 //                    }
-//                    println("Device found: ${it.name} - ${it.address}")
+//                    println("com.example.controlmaster.Device found: ${it.name} - ${it.address}")
 //                }
 //            }
 //        }
