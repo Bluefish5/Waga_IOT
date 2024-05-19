@@ -8,8 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 class AA_RecyclerViewAdapter(private val devices:Array<Device>) : RecyclerView.Adapter<AA_RecyclerViewAdapter.ViewHolder>()
 {
+    var onItemClick : ((Device) ->Unit)? = null
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.textView)
+
+        
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,5 +25,10 @@ class AA_RecyclerViewAdapter(private val devices:Array<Device>) : RecyclerView.A
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = devices[position]
         holder.textView.text = currentItem.name
+        holder.textView.setOnClickListener{
+            onItemClick?.invoke(currentItem)
+        }
     }
+
+
 }
