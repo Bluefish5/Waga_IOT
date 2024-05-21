@@ -4,6 +4,7 @@ import android.content.Context
 import org.simpleframework.xml.core.Persister
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 class AppDataManager {
     val listOfDevices = listOf("waga","starter")
@@ -12,18 +13,44 @@ class AppDataManager {
     fun getDevicesList(): List<String> {
         return listOfDevices
     }
-    fun getDevices(): Device {
-        val serializer = Persister()
-        val source = File("app/res/values/devices.xml")
-        val device: Device = serializer.read(Device::class.java, source)
-        return device
-    }
+
 
     fun writeToFile(context: Context, fileName: String, fileContent: String) {
         val file = File(context.filesDir, fileName)
         FileOutputStream(file).use {
             it.write(fileContent.toByteArray())
         }
+    }
+
+    fun createFile(context: Context, fileName: String, fileContent: String) {
+        try {
+            context.openFileOutput(fileName, Context.MODE_PRIVATE).use { output ->
+                output.write(fileContent.toByteArray())
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    fun doesFileExist(context: Context, fileName: String): Boolean {
+        val file: File = context.getFileStreamPath(fileName)
+        return file.exists()
+    }
+
+    fun readFile(context: Context, fileName: String): String? {
+        return try {
+            context.openFileInput(fileName).bufferedReader().use { it.readText() }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    fun listFiles(context: Context): Array<String> {
+        return context.fileList()
+    }
+
+    fun listFilesContaining(context: Context, substring: String): Array<String> {
+        return context.fileList().filter { it.contains(substring) }.toTypedArray()
     }
 
     fun readFromFile(context: Context, fileName: String): String {

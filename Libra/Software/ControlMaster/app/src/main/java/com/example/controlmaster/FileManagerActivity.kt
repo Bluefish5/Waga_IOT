@@ -1,6 +1,7 @@
 package com.example.controlmaster
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,34 +15,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.controlmaster.ui.theme.ControlMasterTheme
 
 class FileManagerActivity : ComponentActivity() {
+    val appData = AppDataManager()
+
+    companion object {
+        const val FILE_NAME = "example.txt"
+        const val FILE_CONTENT = "Hello, World!"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            ControlMasterTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
-    }
-}
+        setContentView(R.layout.activity_file_manager)
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+        val files = appData.listFiles(this)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ControlMasterTheme {
-        Greeting("Android")
+        val filteredFiles = appData.listFilesContaining(this, "example")
+        Toast.makeText(this, "Files containing 'example': ${filteredFiles.size}", Toast.LENGTH_LONG).show()
     }
-}
+
+
+//        appData.createFile(this, FILE_NAME, FILE_CONTENT)
+//
+//        val fileExists = appData.doesFileExist(this, FileManagerActivity.FILE_NAME)
+//        if (fileExists) {
+//            Toast.makeText(this, "File exists!", Toast.LENGTH_SHORT).show()
+//            // Read from the file
+//            val fileContent = appData.readFile(this, FileManagerActivity.FILE_NAME)
+//            fileContent?.let {
+//                Toast.makeText(this, "File content: $it", Toast.LENGTH_LONG).show()
+//            }
+//        } else {
+//            Toast.makeText(this, "File does not exist!", Toast.LENGTH_SHORT).show()
+//        }
+    }
+
+

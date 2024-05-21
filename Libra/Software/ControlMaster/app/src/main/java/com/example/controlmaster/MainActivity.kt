@@ -4,13 +4,15 @@ import android.content.ClipData
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.datastore.core.Serializer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    val appData = AppDataManager()
+
+
     private lateinit var deviceAdapter: AA_RecyclerViewAdapter
 
 
@@ -22,6 +24,10 @@ class MainActivity : AppCompatActivity() {
             Device(1, "Waga", ""),
             Device(2, "Starter", "")
         )
+
+
+
+
 
         val recyclerView: RecyclerView = findViewById(R.id.myRecyclerView)
 
@@ -40,6 +46,5 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
 }
