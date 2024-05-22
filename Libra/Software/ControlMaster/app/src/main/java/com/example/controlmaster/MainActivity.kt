@@ -26,9 +26,6 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-
-
-
         val recyclerView: RecyclerView = findViewById(R.id.myRecyclerView)
 
         deviceAdapter = AA_RecyclerViewAdapter(devices)

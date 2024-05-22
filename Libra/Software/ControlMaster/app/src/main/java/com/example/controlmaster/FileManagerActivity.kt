@@ -1,6 +1,7 @@
 package com.example.controlmaster
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.controlmaster.ui.theme.ControlMasterTheme
 
 class FileManagerActivity : ComponentActivity() {
@@ -25,10 +28,20 @@ class FileManagerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_manager)
 
-        val files = appData.listFiles(this)
+        val buttonBack: Button = findViewById(R.id.buttonBack)
 
+        val files = appData.listFiles(this)
         val filteredFiles = appData.listFilesContaining(this, "example")
-        Toast.makeText(this, "Files containing 'example': ${filteredFiles.size}", Toast.LENGTH_LONG).show()
+
+        val recyclerView: RecyclerView = findViewById(R.id.myRecyclerView)
+        var deviceAdapter = AA_RecyclerViewAdapterFile(filteredFiles)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = deviceAdapter
+
+        buttonBack.setOnClickListener{
+            finish()
+        }
     }
 
 
