@@ -1,21 +1,11 @@
 package com.example.controlmaster
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.controlmaster.ui.theme.ControlMasterTheme
 
 class FileManagerActivity : ComponentActivity() {
     val appData = AppDataManager()
@@ -30,7 +20,7 @@ class FileManagerActivity : ComponentActivity() {
 
         val buttonBack: Button = findViewById(R.id.buttonBack)
 
-        val files = appData.listFiles(this)
+
         val filteredFiles = appData.listFilesContaining(this, "example")
 
         val recyclerView: RecyclerView = findViewById(R.id.myRecyclerView)
@@ -42,22 +32,17 @@ class FileManagerActivity : ComponentActivity() {
         buttonBack.setOnClickListener{
             finish()
         }
+
+
+        deviceAdapter.onItemClick = {
+            val intent = Intent(this,CsvFileActivity::class.java)
+            intent.putExtra("device",it)
+            startActivity(intent)
+        }
     }
 
 
-//        appData.createFile(this, FILE_NAME, FILE_CONTENT)
-//
-//        val fileExists = appData.doesFileExist(this, FileManagerActivity.FILE_NAME)
-//        if (fileExists) {
-//            Toast.makeText(this, "File exists!", Toast.LENGTH_SHORT).show()
-//            // Read from the file
-//            val fileContent = appData.readFile(this, FileManagerActivity.FILE_NAME)
-//            fileContent?.let {
-//                Toast.makeText(this, "File content: $it", Toast.LENGTH_LONG).show()
-//            }
-//        } else {
-//            Toast.makeText(this, "File does not exist!", Toast.LENGTH_SHORT).show()
-//        }
+
     }
 
 
