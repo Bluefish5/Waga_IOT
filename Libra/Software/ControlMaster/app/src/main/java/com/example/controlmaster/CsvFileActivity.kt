@@ -31,6 +31,7 @@ class CsvFileActivity : AppCompatActivity() {
         val fileExists = appData.doesFileExist(this, FileManagerActivity.FILE_NAME)
         if (fileExists) {
             val fileContent = appData.csvConverter()
+            Toast.makeText(this, fileContent.toString(), Toast.LENGTH_SHORT).show()
         }
         else {
             Toast.makeText(this, "File does not exist!", Toast.LENGTH_SHORT).show()

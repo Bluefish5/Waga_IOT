@@ -13,14 +13,13 @@ class AppDataManager {
     fun getDevicesList(): List<String> {
         return listOfDevices
     }
-    fun csvConverter(): MutableList<List<String>>{
+    fun csvConverter(): MutableList<String>{
         var filePath = "example.txt"
         val file = File(filePath)
-        var Sum = mutableListOf<List<String>>()
+        var Sum = mutableListOf<String>()
 
         file.forEachLine { line ->
-            val tokens = line.split(",")
-            Sum.add(tokens)
+            Sum.add(line)
         }
         return Sum
     }
