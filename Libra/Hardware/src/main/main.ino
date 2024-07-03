@@ -3,17 +3,17 @@
 #include "HX711.h"
 
 // Buttons connections
-#define SWITCH_CHCIKEN_PIN 4
-#define SWITCH_NORMAL_PIN 5
-#define BUTTON_TARA_PIN 6
+#define SWITCH_CHCIKEN_PIN 8
+#define SWITCH_NORMAL_PIN 8
+#define BUTTON_TARA_PIN 8
 
 // Display connections
 #define DISPLAY_CLK 2
-#define DISPLAY_DIO 3
+#define DISPLAY_DIO 4
 
 // HX711 connections
-#define LOADCELL_DOUT_PIN 2;
-#define LOADCELL_SCK_PIN 3;
+#define LOADCELL_DOUT_PIN 12
+#define LOADCELL_SCK_PIN 13
 
 // Check if Bluetooth configs are enabled
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
@@ -21,7 +21,7 @@
 #endif
 
 
-TM1637Display display(CLK, DIO);
+TM1637Display display(DISPLAY_CLK, DISPLAY_DIO);
 HX711 scale;
 BluetoothSerial SerialBT;
 
@@ -29,15 +29,19 @@ String message = "";
 char incomingChar;
 
 uint8_t frameCursor = 0;
-uint8_t frameSets[][]=
-    {SEG_A,SEG_A,SEG_A,SEG_A},
-    {SEG_B,SEG_B,SEG_B,SEG_B},
-    {SEG_C,SEG_C,SEG_C,SEG_C},
-    {SEG_D,SEG_D,SEG_D,SEG_D},
-    {SEG_E,SEG_E,SEG_E,SEG_E},
-    {SEG_E,SEG_E,SEG_E,SEG_E};
+uint8_t frameSets[][4] = {
+    {SEG_A, SEG_A, SEG_A, SEG_A},
+    {SEG_B, SEG_B, SEG_B, SEG_B},
+    {SEG_C, SEG_C, SEG_C, SEG_C},
+    {SEG_D, SEG_D, SEG_D, SEG_D},
+    {SEG_E, SEG_E, SEG_E, SEG_E}};
 
-uint8_t* getFrame() return frameSets[frameCursor++];
+uint8_t* getFrame(){
+  if(frameCursor>5) frameCursor = 0;
+  return frameSets[frameCursor++];
+
+}
+
 
 unsigned long actualTime = 0;
 unsigned long savedTime = 0;
@@ -55,11 +59,11 @@ void setup() {
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
 
 
-  Serial.begin(115200); 
-  SerialBT.begin("WAGA_BT"); 
+  // Serial.begin(115200); 
+  //SerialBT.begin("WAGA_BT"); 
 
-  pinMode(SWITCH_CHCIKEN_PIN, INPUT);
-  pinMode(BUTTON_TARA_PIN, INPUT);
+  // pinMode(SWITCH_CHCIKEN_PIN, INPUT);
+  // pinMode(BUTTON_TARA_PIN, INPUT);
 
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
@@ -80,6 +84,7 @@ void setup() {
     if(timeDiffrenceAnimation >= 500UL)
     {
       savedTimeAnimation = actualTime;
+      display.clear();
       display.setSegments(getFrame());
     }
   }
