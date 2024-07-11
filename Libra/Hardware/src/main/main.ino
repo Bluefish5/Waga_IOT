@@ -34,7 +34,8 @@ uint8_t frameSets[][4] = {
     {SEG_B, SEG_B, SEG_B, SEG_B},
     {SEG_C, SEG_C, SEG_C, SEG_C},
     {SEG_D, SEG_D, SEG_D, SEG_D},
-    {SEG_E, SEG_E, SEG_E, SEG_E}};
+    {SEG_E, SEG_E, SEG_E, SEG_E},
+    {SEG_F, SEG_F, SEG_F, SEG_F}};
 
 uint8_t* getFrame(){
   if(frameCursor>5) frameCursor = 0;
@@ -60,7 +61,7 @@ void setup() {
 
 
   // Serial.begin(115200); 
-  //SerialBT.begin("WAGA_BT"); 
+  SerialBT.begin("WAGA_BT"); 
 
   // pinMode(SWITCH_CHCIKEN_PIN, INPUT);
   // pinMode(BUTTON_TARA_PIN, INPUT);

@@ -1,23 +1,29 @@
+import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-android-extensions")
 }
 
 android {
     namespace = "com.example.controlmaster"
-    compileSdk = 34
-
+    compileSdkVersion(rootProject.extra["compileSdkVersion"] as Int)
     defaultConfig {
         applicationId = "com.example.controlmaster"
         minSdk = 27
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildFeatures{
+            viewBinding = true
+        }
+
+
     }
 
     buildTypes {
@@ -30,8 +36,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = "1.8"
