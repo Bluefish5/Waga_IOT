@@ -8,12 +8,12 @@
 #define BUTTON_TARA_PIN 8
 
 // Display connections
-#define DISPLAY_CLK 2
-#define DISPLAY_DIO 4
+#define DISPLAY_CLK 13
+#define DISPLAY_DIO 27
 
 // HX711 connections
-#define LOADCELL_DOUT_PIN 12
-#define LOADCELL_SCK_PIN 13
+#define LOADCELL_DOUT_PIN 2
+#define LOADCELL_SCK_PIN 4
 
 // Check if Bluetooth configs are enabled
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
@@ -60,24 +60,28 @@ void setup() {
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
 
 
-  // Serial.begin(115200); 
-  SerialBT.begin("WAGA_BT"); 
+  Serial.begin(115200); 
+  //SerialBT.begin("WAGA_BT"); 
 
   // pinMode(SWITCH_CHCIKEN_PIN, INPUT);
   // pinMode(BUTTON_TARA_PIN, INPUT);
 
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
-  display.setBrightness(5);
+  display.setBrightness(3);
   display.clear();
 
   
   while(!scale.is_ready())delay(1);
 
-  scale.set_scale();
+  //scale.set_scale();
+  scale.tare(20);
 
+  scale.set_offset(4294839150);
+  scale.set_scale(33.694530);
+  
   savedTime = millis();
-  while(!(timeDiffrence >= 10000UL) )
+  while(!(timeDiffrence >= 5000UL) )
   {
     actualTime = millis();
     timeDiffrence = actualTime - savedTime;
@@ -94,10 +98,10 @@ void setup() {
 
 
 void loop() {
-  reading = scale.get_units(10);
+  reading = scale.get_units(5);
   display.showNumberDec(reading, false);
-  if (SerialBT.available()){
-    char incomingChar = SerialBT.read();
+  if (Serial.available()){
+    char incomingChar = Serial.read();
     if (incomingChar != '\n'){
       message += String(incomingChar);
     }
@@ -106,7 +110,7 @@ void loop() {
     }
   }
   if (message =="1"){
-    SerialBT.println(reading);
+    Serial.println(reading);
   }
         
 }
