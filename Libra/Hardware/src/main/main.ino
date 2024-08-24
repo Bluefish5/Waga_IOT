@@ -60,7 +60,12 @@ void setup() {
   // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
 
 
-  Serial.begin(115200); 
+  //Serial.begin(115200); 
+
+  pinMode(16, OUTPUT);
+  pinMode(18, OUTPUT);
+  pinMode(21, OUTPUT);
+
   //SerialBT.begin("WAGA_BT"); 
 
   // pinMode(SWITCH_CHCIKEN_PIN, INPUT);
@@ -74,11 +79,10 @@ void setup() {
   
   while(!scale.is_ready())delay(1);
 
-  //scale.set_scale();
   scale.tare(20);
 
-  scale.set_offset(4294839150);
-  scale.set_scale(33.694530);
+  scale.set_offset(4294844575);
+  scale.set_scale(-428.429047);
   
   savedTime = millis();
   while(!(timeDiffrence >= 5000UL) )
@@ -99,19 +103,48 @@ void setup() {
 
 void loop() {
   reading = scale.get_units(5);
+  if(reading > 90 && reading < 200)
+  {
+    digitalWrite(18, HIGH);
+    digitalWrite(16, LOW);
+
+    digitalWrite(21, HIGH);
+    delay(200);
+
+    digitalWrite(21, LOW);
+    delay(100);
+
+    digitalWrite(21, HIGH);
+    delay(200);
+
+    digitalWrite(21, LOW);
+    delay(100);
+
+    digitalWrite(21, HIGH);
+    delay(200);
+
+    digitalWrite(21, LOW);
+    delay(100);
+  }
+  else
+  {
+    digitalWrite(16, HIGH);
+    digitalWrite(18, LOW);
+  }
   display.showNumberDec(reading, false);
-  if (Serial.available()){
-    char incomingChar = Serial.read();
-    if (incomingChar != '\n'){
-      message += String(incomingChar);
-    }
-    else{
-      message = "";
-    }
-  }
-  if (message =="1"){
-    Serial.println(reading);
-  }
+  //potem do BT
+  // if (SerialBT.available()){
+  //   char incomingChar = SerialBT.read();
+  //   if (incomingChar != '\n'){
+  //     message += String(incomingChar);
+  //   }
+  //   else{
+  //     message = "";
+  //   }
+  // }
+  // if (message =="1"){
+  //   SerialBT.println(reading);
+  // }
         
 }
 
