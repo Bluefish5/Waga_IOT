@@ -3,9 +3,13 @@
 #include "HX711.h"
 
 // Buttons connections
-#define SWITCH_CHCIKEN_PIN 8
-#define SWITCH_NORMAL_PIN 8
-#define BUTTON_TARA_PIN 8
+
+#define SWITCH_NORMAL_PIN 15
+#define BUTTON_TARA_PIN 14
+
+#define GREEN_LED_PIN 16
+#define RED_LED_PIN 18
+#define BUZZER_PIN 21
 
 // Display connections
 #define DISPLAY_CLK 13
@@ -15,7 +19,7 @@
 #define LOADCELL_DOUT_PIN 2
 #define LOADCELL_SCK_PIN 4
 
-// Check if Bluetooth configs are enabled
+
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
@@ -55,37 +59,65 @@ int buttonState = 0;
 long reading = 0;
 
 void setup() {
+  pinMode(GREEN_LED_PIN, OUTPUT);
+  pinMode(RED_LED_PIN, OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(SWITCH_NORMAL_PIN,INPUT);
 
-  // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
-  // attachInterrupt(SWITCH_CHCIKEN_PIN, detectsMovement, RISING);
+  digitalWrite(RED_LED_PIN, HIGH);
+  digitalWrite(GREEN_LED_PIN, HIGH);
+  digitalWrite(BUZZER_PIN, LOW);
 
+  bool switchState = digitalRead(SWITCH_NORMAL_PIN);
 
-  //Serial.begin(115200); 
-
-  pinMode(16, OUTPUT);
-  pinMode(18, OUTPUT);
-  pinMode(21, OUTPUT);
-
-  //SerialBT.begin("WAGA_BT"); 
-
-  // pinMode(SWITCH_CHCIKEN_PIN, INPUT);
-  // pinMode(BUTTON_TARA_PIN, INPUT);
+  display.clear();
 
   scale.begin(LOADCELL_DOUT_PIN, LOADCELL_SCK_PIN);
 
-  display.setBrightness(3);
-  display.clear();
-
-  
   while(!scale.is_ready())delay(1);
 
   scale.tare(20);
-
   scale.set_offset(4294844575);
   scale.set_scale(-428.429047);
-  
+
+  if (switchState == LOW) {
+    normalMode();
+  }
+  else{
+    smartMode();
+  }
+}
+
+void beepbeepbeep(){
+  digitalWrite(21, HIGH);
+  delay(200);
+
+  digitalWrite(21, LOW);
+  delay(100);
+
+  digitalWrite(21, HIGH);
+  delay(200);
+
+  digitalWrite(21, LOW);
+  delay(100);
+
+  digitalWrite(21, HIGH);
+  delay(200);
+
+  digitalWrite(21, LOW);
+  delay(100);
+}
+
+void loop() {}
+
+void normalMode()
+{
+  //setup
+  display.setBrightness(3);
+  display.clear();
+
   savedTime = millis();
-  while(!(timeDiffrence >= 5000UL) )
+  while(!(timeDiffrence >= 2500UL) )
   {
     actualTime = millis();
     timeDiffrence = actualTime - savedTime;
@@ -97,54 +129,45 @@ void setup() {
       display.setSegments(getFrame());
     }
   }
+  //loop
+  while(1){
+    reading = scale.get_units(5);
+    if(reading > 90 && reading < 200)
+    {
+      digitalWrite(18, HIGH);
+      digitalWrite(16, LOW);
+      beepbeepbeep();
+    }
+    else
+    {
+      digitalWrite(16, HIGH);
+      digitalWrite(18, LOW);
+    }
+    display.showNumberDec(reading, false);
+  }
+  
+}
+
+void smartMode()
+{
+  //setup
+  SerialBT.begin("WAGA_BT");
   scale.tare();
+  //loop
+  while(1){
+      reading = scale.get_units(5);
+      if (SerialBT.available()){
+      char incomingChar = SerialBT.read();
+      if (incomingChar != '\n'){
+        message += String(incomingChar);
+      }
+      else{
+        message = "";
+      }
+    }
+    if (message =="1"){
+      SerialBT.println(reading);
+    }
   }
-
-
-void loop() {
-  reading = scale.get_units(5);
-  if(reading > 90 && reading < 200)
-  {
-    digitalWrite(18, HIGH);
-    digitalWrite(16, LOW);
-
-    digitalWrite(21, HIGH);
-    delay(200);
-
-    digitalWrite(21, LOW);
-    delay(100);
-
-    digitalWrite(21, HIGH);
-    delay(200);
-
-    digitalWrite(21, LOW);
-    delay(100);
-
-    digitalWrite(21, HIGH);
-    delay(200);
-
-    digitalWrite(21, LOW);
-    delay(100);
-  }
-  else
-  {
-    digitalWrite(16, HIGH);
-    digitalWrite(18, LOW);
-  }
-  display.showNumberDec(reading, false);
-  //potem do BT
-  // if (SerialBT.available()){
-  //   char incomingChar = SerialBT.read();
-  //   if (incomingChar != '\n'){
-  //     message += String(incomingChar);
-  //   }
-  //   else{
-  //     message = "";
-  //   }
-  // }
-  // if (message =="1"){
-  //   SerialBT.println(reading);
-  // }
-        
 }
 
