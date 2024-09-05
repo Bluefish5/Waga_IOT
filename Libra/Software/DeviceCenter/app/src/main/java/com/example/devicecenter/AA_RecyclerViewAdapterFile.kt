@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.devicecenter.R
 
 class AA_RecyclerViewAdapterFile(private val devices:Array<String>) : RecyclerView.Adapter<AA_RecyclerViewAdapterFile.ViewHolder>()
 {

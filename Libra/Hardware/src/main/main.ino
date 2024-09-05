@@ -77,8 +77,8 @@ void setup() {
   while(!scale.is_ready())delay(1);
 
   scale.tare(20);
-  scale.set_offset(4294844575);
-  scale.set_scale(-428.429047);
+  scale.set_offset(4294843576);
+  scale.set_scale(-428.702057);
 
   if (switchState == LOW) {
     normalMode();
@@ -132,7 +132,7 @@ void normalMode()
   //loop
   while(1){
     reading = scale.get_units(5);
-    if(reading > 90 && reading < 200)
+    if(reading > 50 && reading < 70)
     {
       digitalWrite(18, HIGH);
       digitalWrite(16, LOW);

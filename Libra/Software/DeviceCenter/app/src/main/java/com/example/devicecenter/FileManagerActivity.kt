@@ -6,9 +6,10 @@ import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.devicecenter.R
 
 class FileManagerActivity : ComponentActivity() {
-    val appData = AppDataManager()
+    //val appData = AppDataManager()
 
     companion object {
         const val FILE_NAME = "example.txt"
@@ -21,28 +22,25 @@ class FileManagerActivity : ComponentActivity() {
         val buttonBack: Button = findViewById(R.id.buttonBack)
 
 
-        val filteredFiles = appData.listFilesContaining(this, "example")
+        //val filteredFiles = appData.listFilesContaining(this, "example")
 
         val recyclerView: RecyclerView = findViewById(R.id.myRecyclerView)
-        var deviceAdapter = AA_RecyclerViewAdapterFile(filteredFiles)
+        //var deviceAdapter = AA_RecyclerViewAdapterFile(filteredFiles)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
-        recyclerView.adapter = deviceAdapter
+        //recyclerView.adapter = deviceAdapter
 
         buttonBack.setOnClickListener{
             finish()
         }
 
 
-        deviceAdapter.onItemClick = {
-            val intent = Intent(this,CsvFileActivity::class.java)
-            intent.putExtra("device",it)
-            startActivity(intent)
+        //deviceAdapter.onItemClick = {
+
         }
     }
 
 
 
-    }
 
 
